@@ -1,6 +1,6 @@
-package spotify.stream;
-import spotify.media.Globals;
-import spotify.media.Media;
+package sdis.spotify.stream;
+import sdis.spotify.media.Globals;
+import sdis.spotify.media.Media;
 import java.io.*;
 import java.net.Socket;
 /**
