@@ -30,7 +30,7 @@ public class SpotifyClientImpl extends UnicastRemoteObject implements SpotifyCli
     }
 
     public void startStream(Media cancion, String ipServerSocket, int puertoServer) throws RemoteException {
-        ClientStream cs = new ClientStream(...); // 1. Se crean los objetos necesarios según el constructor de ClientStream
+        ClientStream cs = new ClientStream(cancion,ipServerSocket,puertoServer,playerThread); // 1. Se crean los objetos necesarios según el constructor de ClientStream
         new Thread(cs, "clientstream").start(); // 2. Se inicia un nuevo hilo para ejecutar ClientStream
     }
 }
