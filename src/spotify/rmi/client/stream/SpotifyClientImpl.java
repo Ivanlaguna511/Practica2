@@ -1,9 +1,9 @@
-package sdis.spotify.client.stream;
+package spotify.client.stream;
 
-import sdis.spotify.common.SpotifyClient;
-import sdis.spotify.media.Media;
-import sdis.spotify.media.*;
-import sdis.spotify.stream.ClientStream;
+import spotify.common.SpotifyClient;
+import spotify.media.Media;
+import spotify.media.*;
+import spotify.stream.ClientStream;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
