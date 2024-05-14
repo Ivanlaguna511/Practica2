@@ -163,8 +163,8 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
             // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
             String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
+            ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
             try {
-                ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
                 new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -184,9 +184,9 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
             }
 
             // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
-            System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getLocalPort());
+            System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getServerSocketPort());
             try {
-                this.cliente.startStream(cancion, Globals.server_host, ss.getLocalPort()); // Notifica al cliente que está listo para el streaming
+                this.cliente.startStream(cancion, Globals.server_host, ss.getServerSocketPort()); // Notifica al cliente que está listo para el streaming
             } catch (RemoteException e) {
                 e.printStackTrace();
                 return "Error during streaming at client";
