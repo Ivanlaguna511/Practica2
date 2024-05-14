@@ -1,4 +1,4 @@
-package spotify.client.stream;
+package spotify.rmi.client.stream;
 
 import spotify.rmi.common.SpotifyClient;
 import spotify.media.Media;
