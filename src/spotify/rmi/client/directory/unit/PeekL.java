@@ -7,7 +7,8 @@ import java.rmi.Naming;
 public class PeekL {
     public static void main(String [] args) {
         try {
-            Spotify or = (Spotify) Naming.lookup("rmi://localhost/id1");
+            String host = "localhost";
+            Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if (args.length == 0) {
                 Media cancion = or.peekL();
                 System.out.println("Canción " + cancion + " consumida de la playlist DEFAULT.");
