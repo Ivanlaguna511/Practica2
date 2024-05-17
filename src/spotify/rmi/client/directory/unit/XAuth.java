@@ -6,7 +6,8 @@ import java.rmi.Naming;
 public class XAuth {
     public static void main(String[] args) {
         try {
-            Spotify or = (Spotify) Naming.lookup("rmi://localhost/id1");
+            String host = "localhost";
+            Spotify or = (Spotify) Naming.lookup("rmi://" + host "/id1");
 
             String username = args[0];
             String password = args[1];
