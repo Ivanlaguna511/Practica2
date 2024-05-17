@@ -7,7 +7,8 @@ import java.rmi.Naming;
 public class Add2L {
     public static void main(String[] args) {
         try {
-            Spotify or = (Spotify) Naming.lookup("rmi://localhost/id1");
+            String host = "localhost";
+            Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if (args.length == 1) {
                 String cancion = args[0];
                 // Añadir a la playlist DEFAULT
