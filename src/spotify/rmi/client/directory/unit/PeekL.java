@@ -10,14 +10,14 @@ public class PeekL {
             String host = "localhost";
             Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if (args.length == 0) {
-                Media cancion = or.peekL();
-                System.out.println("Canción " + cancion + " consumida de la playlist DEFAULT.");
+                Media respuesta = or.peekL();
+                System.out.println("Respuesta: " + respuesta + " ]");
             } else if (args.length == 1) {
-                String playlist = args[1];
-                Media cancion = or.peekL(playlist);
-                System.out.println("Canción " + cancion + " consumida de la playlist " + playlist + ".");
+                String playlist = args[0];
+                Media respuesta = or.peekL(playlist);
+                System.out.println("Respuesta: " + respuesta + " ]");
             } else {
-                System.out.println("Uso incorrecto: ReadL [playlist]  ó  ReadL.");
+                System.out.println("Uso incorrecto: PeekL [playlist]  ó  PeekL.");
             }
         } catch (java.rmi.RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
