@@ -12,9 +12,9 @@ public class DeleteL {
             if (args.length == 1) {
                 String playlist = args[0];
                 String respuesta = or.deleteL(playlist);
-                System.out.println("[Respuesta:  " + respuesta + ".");
+                System.out.println("[Respuesta:  " + respuesta + " ]");
             } else {
-                System.out.println("Uso incorrecto: DeleteL [playlist].");
+                System.out.println("Uso incorrecto: DeleteL [playlist]");
             }
         } catch (java.rmi.RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
