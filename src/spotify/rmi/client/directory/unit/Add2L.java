@@ -14,17 +14,17 @@ public class Add2L {
                 // Añadir a la playlist DEFAULT
                 Media media = new Media(cancion);
                 or.add2L(media);
-                System.out.println("Cancion " + cancion + " añadida a la playlist DEFAULT.");
+                System.out.println("Canción " + cancion + " añadida a la playlist DEFAULT.");
             } else if (args.length == 2) {
                 // Añadir a una playlist específica
-                String playlist = args[0];
-                String cancion = args[1];
+                String cancion = args[0];
                 Media media = new Media(cancion);
+                String playlist = args[1];
 
                 or.add2L(playlist, media);
-                System.out.println("Cancion " + cancion + " añadida a la playlist " + playlist + ".");
+                System.out.println("Canción " + cancion + " añadida a la playlist " + playlist + ".");
             } else {
-                System.out.println("Uso incorrecto: Add2L [nombre] [playlist]  ó  Add2L [nombre].");
+                System.out.println("Uso incorrecto: Add2L [canción] [playlist]  ó  Add2L [canción].");
             }
         } catch (java.rmi.RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
