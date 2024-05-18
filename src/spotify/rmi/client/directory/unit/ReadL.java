@@ -13,7 +13,7 @@ public class ReadL {
                 System.out.println("[Respuesta: " + respuesta + " ]");
             }
             else if(args.length == 1){
-                String playlist = args[1];
+                String playlist = args[0];
                 Media respuesta = or.readL(playlist);
                 System.out.println("[Respuesta: " + respuesta + " ]");
             }
