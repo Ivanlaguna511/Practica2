@@ -4,6 +4,8 @@ import spotify.media.Media;
 import spotify.rmi.common.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import spotify.stream.ServerStream;
@@ -88,14 +90,19 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     @Override
     public String getDirectoryList() throws RemoteException {
+        // Obtener las claves del directorio como una lista
+        List<String> keys = new ArrayList<>(directorio.keySet());
+        // Verificar si la lista está vacía
+        if (keys.isEmpty()) {
+            return "";
+        }
+        // Unir las claves utilizando un separador ", "
         String result = "";
-        for (String clave : directorio.keySet()) {
-            result += clave + ", ";
+        for (int i = 0; i < keys.size() - 1; i++) {
+            result += keys.get(i) + ", ";
         }
-        // Eliminar la última coma y espacio
-        if (result.length() > 0) {
-            result = result.substring(0, result.length() - 2);
-        }
+        // Añadir la última clave sin la coma final
+        result += keys.get(keys.size() - 1);
         return result;
     }
 
