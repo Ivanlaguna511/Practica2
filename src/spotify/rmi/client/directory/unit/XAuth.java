@@ -13,7 +13,7 @@ public class XAuth {
             String password = args[1];
 
             String respuesta = or.auth(username, password);
-            System.out.println("[Respuesta:" + respuesta + "]");
+            System.out.println("[Respuesta: " + respuesta + "]");
         } catch (java.rmi.RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
             re.printStackTrace();
