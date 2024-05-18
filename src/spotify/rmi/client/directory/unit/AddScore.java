@@ -2,7 +2,6 @@ package spotify.rmi.client.directory.unit;
 
 import spotify.media.Media;
 import spotify.rmi.common.Spotify;
-
 import java.rmi.Naming;
 
 public class AddScore {
@@ -11,7 +10,7 @@ public class AddScore {
             String host = "localhost";
             Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if(args.length == 2){
-                String nombreCancion = args[0];
+                String ID = args[0];
                 double puntuacion;
                 try {
                     puntuacion = Double.parseDouble(args[1]);
@@ -22,8 +21,8 @@ public class AddScore {
                     throw new IllegalArgumentException("El segundo argumento debe ser un número.");
                 }
 
-                String respuesta = or.addScore(nombreCancion, puntuacion);
-                System.out.println("[Respuesta:" + respuesta + "]");
+                String respuesta = or.addScore(ID, puntuacion);
+                System.out.println("[Respuesta: " + respuesta + " ]");
             }
             else {
                 System.out.println("Uso incorrecto, uso: AddScore [ID] [puntuación]");
@@ -36,5 +35,3 @@ public class AddScore {
             System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();
         }
-    }
-}
