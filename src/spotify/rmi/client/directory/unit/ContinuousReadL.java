@@ -1,24 +1,53 @@
 package spotify.rmi.client.directory.unit;
-/*
-● tener un cliente “ContinuousReadL” que nos permita leer destructivamente de
-manera sencilla e interactiva para comprobar el contenido de una playlist y llegar a
-agotar el contenido de ésta. Después se ha de comprobar con “RetrieveMedia”
-que los elementos, aunque no siguen en la playlist, si están en el directorio.
- */
+
+import spotify.rmi.common.Spotify;
+import spotify.media.Media;
+
+import java.rmi.Naming;
+import java.util.Scanner;
+
 public class ContinuousReadL {
-    //Ejemplo
-    public static void main(String [ ] args) {
-        String host = (args.length < 1) ? null : args[0];
+    public static void main(String[] args) {
         try {
-            Hello or = (Hello) Naming.lookup("rmi://"+host+"/id1");
-            String respuesta = or.sayHello();
-            System.out.println("[Respuesta:"+respuesta+"]");
+            String host = "localhost";
+            Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
+            Scanner scanner = new Scanner(System.in);
+            if(args.length == 0) {
+                while(true) {
+                    Media respuesta = or.readL();
+                    if (respuesta == null) {
+                        System.out.println("No hay más canciones en la playlist DEFAULT");
+                        break;
+                    }
+                    System.out.println("[Respuesta: " + respuesta + " ]");
+                    System.out.println(" ");
+                    System.out.println("Presione Enter para leer la siguiente canción...");
+                    scanner.nextLine();
+                }
+            }
+            else if(args.length == 1){
+                String playlist = args[0];
+                while(true) {
+                    Media respuesta = or.readL(playlist);
+                    if (respuesta == null) {
+                        System.out.println("No hay más canciones en la playlist " + playlist);
+                        break;
+                    }
+                    System.out.println("[Respuesta: " + respuesta + " ]");
+                    System.out.println(" ");
+                    System.out.println("Presione Enter para leer la siguiente canción...");
+                    scanner.nextLine();
+                }
+            }
+            else{
+                System.out.println("Uso incorrecto: ContinuousReadL [playlist]  ó  ContinuousReadL.");
+            }
         } catch (java.rmi.RemoteException re) {
-            System.err.println("<Cliente: Excepción RMI:"+re);
+            System.err.println("<Cliente: Excepción RMI:" + re);
             re.printStackTrace();
 
         } catch (Exception e) {
-            System.err.println("<Cliente: Excepcion: "+e);
+            System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();
         }
     }
