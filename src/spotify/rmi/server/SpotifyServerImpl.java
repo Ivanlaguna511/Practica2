@@ -102,7 +102,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
             result += keys.get(i) + ", ";
         }
         // Añadir la última clave sin la coma final
-        result += keys.get(keys.size() - 1);
+        result += keys.get(keys.size()-1);
         return result;
     }
 
@@ -147,6 +147,21 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
     }
 
     @Override
+    public void addLike(String nombreCancion) throws RemoteException {
+        Media aux = directorio.obtenerMedia(nombreCancion);
+
+        aux.addLike();
+        directorio.anadirMedia(nombreCancion, aux);
+    }
+    @Override
+    public void tagAdultContent(String nombreCancion, boolean flag) throws RemoteException {
+        Media aux = directorio.obtenerMedia(nombreCancion);
+
+        aux.tagAdultContent(flag);
+        directorio.anadirMedia(nombreCancion, aux);
+    }
+
+    @Override
     public boolean setClientStreamReceptor(SpotifyClient cliente) throws RemoteException {
         try {
             this.cliente = cliente;
@@ -163,41 +178,41 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     @Override
     public String startMedia(Media cancion) throws RemoteException {
-            // 1. CHECKS
-            if (cancion == null || !directorio.contieneClave(cancion.getName())){
-                return "Media is null or does not exist in the directory";
-            }
+        // 1. CHECKS
+        if (cancion == null || !directorio.contieneClave(cancion.getName())){
+            return "Media is null or does not exist in the directory";
+        }
 
-            // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
-            String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
-            ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
-            try {
-                new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return "Error preparing server socket for streaming";
-            }
+        // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
+        String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
+        ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
+        try {
+            new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return "Error preparing server socket for streaming";
+        }
 
-            // 3. LAUNCH CLIENT MEDIAPLAYER
-            System.out.println("- Checking MediaPlayer status...");
-            try {
-                if (!this.cliente.launchMediaPlayer(cancion)) { // Ejecuta el método launchMediaPlayer del cliente
-                    return "Launcher cannot be triggered";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Error launching Media Player at client";
+        // 3. LAUNCH CLIENT MEDIAPLAYER
+        System.out.println("- Checking MediaPlayer status...");
+        try {
+            if (!this.cliente.launchMediaPlayer(cancion)) { // Ejecuta el método launchMediaPlayer del cliente
+                return "Launcher cannot be triggered";
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error launching Media Player at client";
+        }
 
-            // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
-            System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getServerSocketPort());
-            try {
-                this.cliente.startStream(cancion, Globals.server_host, ss.getServerSocketPort()); // Notifica al cliente que está listo para el streaming
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                return "Error during streaming at client";
-            }
-            return "MEDIA " + cancion.getName() + " started";
+        // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
+        System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getServerSocketPort());
+        try {
+            this.cliente.startStream(cancion, Globals.server_host, ss.getServerSocketPort()); // Notifica al cliente que está listo para el streaming
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return "Error during streaming at client";
+        }
+        return "MEDIA " + cancion.getName() + " started";
     }
 }
