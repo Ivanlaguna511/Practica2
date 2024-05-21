@@ -10,7 +10,7 @@ public class AddScore {
             String host = "localhost";
             Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if(args.length == 2){
-                String ID = args[0];
+                String cancion = args[0];
                 double puntuacion;
                 try {
                     puntuacion = Double.parseDouble(args[1]);
@@ -21,7 +21,7 @@ public class AddScore {
                     throw new IllegalArgumentException("El segundo argumento debe ser un número.");
                 }
 
-                String respuesta = or.addScore(ID, puntuacion);
+                String respuesta = or.addScore(cancion, puntuacion);
                 System.out.println("[Respuesta: " + respuesta + " ]");
             }
             else {
