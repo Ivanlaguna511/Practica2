@@ -172,9 +172,47 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         }
     }
 
-    @Override
+   @Override
     public String randomPlay() {
-        return null;  //No se que tiene que hacer este método
+
+
+        Random random = new Random();
+        int longitud = directorio.size();
+        int indice=random.nextInt(longitud);
+        Media cancion=directorio.getValue(indice);
+        if (cancion == null || !directorio.contieneClave(cancion.getName())){
+            return "Media is null or does not exist in the directory";
+        }
+
+        ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
+        try {
+            new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return "Error preparing server socket for streaming";
+        }
+
+        // 3. LAUNCH CLIENT MEDIAPLAYER
+        System.out.println("- Checking MediaPlayer status...");
+        try {
+            if (!this.cliente.launchMediaPlayer(cancion)) { // Ejecuta el método launchMediaPlayer del cliente
+                return "Launcher cannot be triggered";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error launching Media Player at client";
+        }
+
+        // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
+        System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getServerSocketPort());
+        try {
+            this.cliente.startStream(cancion, Globals.server_host, ss.getServerSocketPort()); // Notifica al cliente que está listo para el streaming
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return "Error during streaming at client";
+        }
+        return "MEDIA " + cancion.getName() + " started";
     }
 
     @Override
