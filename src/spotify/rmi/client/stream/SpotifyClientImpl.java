@@ -12,7 +12,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class SpotifyClientImpl extends UnicastRemoteObject implements SpotifyClient {
     private Thread playerThread;
 
-    protected SpotifyClientImpl() throws RemoteException {
+    public SpotifyClientImpl() throws RemoteException {
         super();
     }
 
