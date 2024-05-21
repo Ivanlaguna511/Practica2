@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import spotify.stream.ServerStream;
@@ -102,7 +103,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
             result += keys.get(i) + ", ";
         }
         // Añadir la última clave sin la coma final
-        result += keys.get(keys.size()-1);
+        result += keys.get(keys.size() - 1);
         return result;
     }
 
@@ -114,9 +115,8 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     //En el enunciado no pasa el string de nombre cancion
     @Override
-    public String setCover(Media imagen) throws RemoteException {
+    public String setCover(String nombreCancion, Media imagen) throws RemoteException {
         Media aux;
-        String nombreCancion = imagen.getName();
         if ((aux = directorio.obtenerMedia(nombreCancion)) == null){
             return "No se ha podido cambiar la carátula";
         }
@@ -148,21 +148,6 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
     }
 
     @Override
-    public void addLike(String nombreCancion) throws RemoteException {
-        Media aux = directorio.obtenerMedia(nombreCancion);
-
-        aux.addLike();
-        directorio.anadirMedia(nombreCancion, aux);
-    }
-    @Override
-    public void tagAdultContent(String nombreCancion, boolean flag) throws RemoteException {
-        Media aux = directorio.obtenerMedia(nombreCancion);
-
-        aux.tagAdultContent(flag);
-        directorio.anadirMedia(nombreCancion, aux);
-    }
-
-    @Override
     public boolean setClientStreamReceptor(SpotifyClient cliente) throws RemoteException {
         try {
             this.cliente = cliente;
@@ -174,18 +159,16 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     @Override
     public String randomPlay() {
-        return null;  //No se que tiene que hacer este método
-    }
 
-    @Override
-    public String startMedia(Media cancion) throws RemoteException {
-        // 1. CHECKS
+
+        Random random = new Random();
+        int longitud = directorio.size();
+        int indice=random.nextInt(longitud);
+        Media cancion=directorio.getValue(indice);
         if (cancion == null || !directorio.contieneClave(cancion.getName())){
             return "Media is null or does not exist in the directory";
         }
 
-        // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
-        String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
         ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
         try {
             new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
@@ -215,5 +198,47 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
             return "Error during streaming at client";
         }
         return "MEDIA " + cancion.getName() + " started";
+    }
+
+
+
+    @Override
+    public String startMedia(Media cancion) throws RemoteException {
+            // 1. CHECKS
+            if (cancion == null || !directorio.contieneClave(cancion.getName())){
+                return "Media is null or does not exist in the directory";
+            }
+
+            // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
+            String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
+            ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
+            try {
+                new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return "Error preparing server socket for streaming";
+            }
+
+            // 3. LAUNCH CLIENT MEDIAPLAYER
+            System.out.println("- Checking MediaPlayer status...");
+            try {
+                if (!this.cliente.launchMediaPlayer(cancion)) { // Ejecuta el método launchMediaPlayer del cliente
+                    return "Launcher cannot be triggered";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error launching Media Player at client";
+            }
+
+            // 4. READY FOR STREAMING, PLEASE CLIENT GO GO GO
+            System.out.println("- Sending server streaming ready signal..." + Globals.server_host + ":" + ss.getServerSocketPort());
+            try {
+                this.cliente.startStream(cancion, Globals.server_host, ss.getServerSocketPort()); // Notifica al cliente que está listo para el streaming
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                return "Error during streaming at client";
+            }
+            return "MEDIA " + cancion.getName() + " started";
     }
 }
