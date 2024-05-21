@@ -9,10 +9,10 @@ public class AddComment {
             String host = "localhost";
             Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
             if(args.length == 2){
-                String ID = args[0];
+                String cancion = args[0];
                 String comment = args[1];
 
-                String respuesta = or.addComment(ID, comment);
+                String respuesta = or.addComment(cancion, comment);
                 System.out.println("[Respuesta: " + respuesta + "]");
             }
             else {
