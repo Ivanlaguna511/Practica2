@@ -18,7 +18,7 @@ public interface Spotify extends Remote {
     public  Media retrieveMedia(String nombreCancion) throws RemoteException;
 
     //En el enunciado no pasa el String de nombreCancion
-    String setCover(String nombreCancion, Media imagen) throws RemoteException;
+    String setCover(Media imagen) throws RemoteException;
 
     public  String addScore(String nombreCancion, double puntuacion) throws RemoteException;
     public  String addComment(String nombreCancion, String comentario) throws RemoteException;
