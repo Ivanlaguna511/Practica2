@@ -1,8 +1,5 @@
 package spotify.utils;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import spotify.media.Media;
 
@@ -36,6 +33,18 @@ public class Directorio {
             keys.add(entry.getKey());
         }
         return keys;
+    }
+    public Media getValue(int indice) {
+        List<Map.Entry<String, Media>> entryList = new ArrayList<>(directorio.entrySet());
+
+        // Acceder a un valor mediante índice
+        int index = 1; // Índice que deseas acceder (por ejemplo, 1)
+        if (index >= 0 && index < entryList.size()) {
+            Map.Entry<String, Media> entry = entryList.get(index);
+            return entry.getValue();
+
+        }
+        return null;
     }
     public boolean contieneClave(String clave) {
         return this.directorio.containsKey(clave);
