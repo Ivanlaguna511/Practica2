@@ -42,7 +42,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
     @Override
     public void add2L(Media cancion) throws RemoteException {
         if(!directorio.existeMedia(cancion)){
-            directorio.anadirMedia("directorio.size()+1", cancion);
+            directorio.anadirMedia(cancion.getName(), cancion);
         }
         mapa.push("DEFAULT", cancion);
     }
@@ -50,7 +50,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
     @Override
     public void add2L(String nombrePlaylist, Media cancion) throws RemoteException {
         if(!directorio.existeMedia(cancion)){
-            directorio.anadirMedia("directorio.size()+1", cancion);
+            directorio.anadirMedia(cancion.getName(), cancion);
         }
         mapa.push(nombrePlaylist, cancion);
     }
