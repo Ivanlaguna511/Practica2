@@ -6,10 +6,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import spotify.stream.ServerStream;
 import spotify.utils.Directorio;
+
 
 public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, SpotifyServer {
     private SpotifyClient cliente;
@@ -111,17 +113,14 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         return directorio.obtenerMedia(nombreCancion);
     }
 
-
-    //En el enunciado no pasa el string de nombre cancion
     @Override
-    public String setCover(Media imagen) throws RemoteException {
-        Media aux;
-        String nombreCancion = imagen.getName();
-        if ((aux = directorio.obtenerMedia(nombreCancion)) == null){
+    public String setCover(String nombreCancion, Media imagen) throws RemoteException {
+        Media cancion = directorio.obtenerMedia(nombreCancion);
+        if (cancion == null){
             return "No se ha podido cambiar la carátula";
         }
-        aux.setCover(imagen.getCover());
-        directorio.anadirMedia(nombreCancion,aux);
+        cancion.setCover(imagen.getCover());
+        directorio.anadirMedia(nombreCancion,cancion);
         return "Se ha podido cambiar la carátula";
     }
 
@@ -172,10 +171,8 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         }
     }
 
-   @Override
+    @Override
     public String randomPlay() {
-
-
         Random random = new Random();
         int longitud = directorio.size();
         int indice=random.nextInt(longitud);
