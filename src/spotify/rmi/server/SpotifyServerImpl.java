@@ -114,8 +114,9 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     //En el enunciado no pasa el string de nombre cancion
     @Override
-    public String setCover(String nombreCancion, Media imagen) throws RemoteException {
+    public String setCover(Media imagen) throws RemoteException {
         Media aux;
+        String nombreCancion = imagen.getName();
         if ((aux = directorio.obtenerMedia(nombreCancion)) == null){
             return "No se ha podido cambiar la carátula";
         }
