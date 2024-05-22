@@ -23,7 +23,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
     private final MultiMap<String, Media> mapa;
     private final Directorio directorio;
     public SpotifyServerImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf) throws RemoteException {
-        super(0, rmicsf, rmissf);
+        super(1100, rmicsf, rmissf);
         this.directorio = new Directorio();
         this.mapa = new MultiMap<>();
         this.registroUsuarios = new ConcurrentHashMap<>();
