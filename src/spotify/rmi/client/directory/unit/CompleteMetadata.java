@@ -5,56 +5,64 @@ import spotify.utils.Directorio;
 import spotify.media.Media;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class CompleteMetadata {
     public static void main(String[] args) {
         try {
             String host = "localhost";
-            Spotify spotify = (Spotify) Naming.lookup("rmi://" + host + "/id1");
+            Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
 
-            System.out.println("Enriqueciendo los metadatos de los elementos en el directorio...");
-            Directorio directorio = new Directorio();
+            // Listas de comentarios para elegir aleatoriamente
+            String [] comentarios = {
+                    "¡Me encanta!",
+                    "¡Excelente canción!",
+                    "No está mal.",
+                    "Podría ser mejor.",
+                    "¡La mejor canción de todas!",
+                    "Increíble.",
+                    "Me hace feliz.",
+                    "No es mi estilo."};
 
             // Crear un objeto Random para generar datos aleatorios
             Random random = new Random();
 
-            // Listas de comentarios para elegir aleatoriamente
-            String[] comentarios = {"¡Me encanta!", "¡Excelente canción!", "No está mal.", "Podría ser mejor.",
-                    "¡La mejor canción de todas!", "Increíble.", "Me hace feliz.", "No es mi estilo."};
+            // Obtener el conjunto de claves del directorio
+            String claves = or.getDirectoryList();
+            if (claves.length() == 0){
+                System.out.println("No se pudo realizar la acción");
+            }
+            else {
+                System.out.println("Enriqueciendo los metadatos de los elementos en el directorio...");
+                String[] palabras = claves.split(", ");
 
-            for (String clave : directorio.keySet()) {
-                Media media = directorio.obtenerMedia(clave);
-                if (media != null) {
-
+                for (String clave : palabras) {
                     // Añadir un número aleatorio de likes (0 a 100)
                     int likes = random.nextInt(101);
                     for (int i = 0; i < likes; i++) {
-                        spotify.addLike(clave);
+                        or.addLike(clave);
                     }
-                    System.out.println(likes + " likes añadidos.");
 
                     // Añadir un número aleatorio de comentarios (0 a 5)
                     int numComentarios = random.nextInt(6);
                     for (int i = 0; i < numComentarios; i++) {
                         String comentario = comentarios[random.nextInt(comentarios.length)];
-                        spotify.addComment(clave, comentario);
+                        or.addComment(clave, comentario);
                     }
-                    System.out.println(numComentarios + " comentarios añadidos.");
 
                     // Añadir tag adulto aleatoriamente (true o false)
                     boolean isAdult = random.nextBoolean();
-                    spotify.tagAdultContent(clave, isAdult);
-                    System.out.println("Tag adulto añadido: " + isAdult);
+                    or.tagAdultContent(clave, isAdult);
 
                     // Añadir una puntuación aleatoria (0.0 a 10.0)
                     double score = random.nextDouble() * 10;
-                    spotify.addScore(clave, score);
-                    System.out.println("Score añadido: " + score);
+                    or.addScore(clave, score);
                 }
             }
-
-        } catch (java.rmi.RemoteException re) {
+        } catch (RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
             re.printStackTrace();
 
