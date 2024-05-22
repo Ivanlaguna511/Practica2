@@ -3,6 +3,8 @@ import spotify.media.Globals;
 import spotify.media.Media;
 import spotify.rmi.common.*;
 import java.rmi.RemoteException;
+import java.rmi.server.RMIClientSocketFactory;
+import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +14,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import spotify.stream.ServerStream;
 import spotify.utils.Directorio;
 
+import javax.swing.*;
+
 
 public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, SpotifyServer {
     private SpotifyClient cliente;
     private ConcurrentHashMap<String, String> registroUsuarios;
     private final MultiMap<String, Media> mapa;
     private final Directorio directorio;
-    public SpotifyServerImpl() throws java.rmi.RemoteException {
-        super();
+    public SpotifyServerImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf) throws RemoteException {
+        super(0, rmicsf, rmissf);
         this.directorio = new Directorio();
         this.mapa = new MultiMap<>();
         this.registroUsuarios = new ConcurrentHashMap<>();
