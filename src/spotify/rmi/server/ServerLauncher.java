@@ -14,7 +14,7 @@ public class ServerLauncher {
         try {
             SslRMIClientSocketFactory rmicsf = new SslRMIClientSocketFactory();
             javax.rmi.ssl.SslRMIServerSocketFactory rmissf = new javax.rmi.ssl.SslRMIServerSocketFactory();
-            Registry r = java.rmi.registry.LocateRegistry.createRegistry(1099, rmicsf, rmissf);
+            Registry r = java.rmi.registry.LocateRegistry.createRegistry(1100, rmicsf, rmissf);
             SpotifyServerImpl oRemoto = new SpotifyServerImpl(rmicsf, rmissf);
             r.rebind("id1", oRemoto);
             System.err.println("Servidor preparado");
