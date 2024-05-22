@@ -15,7 +15,7 @@ public class SpotifyClientImpl extends UnicastRemoteObject implements SpotifyCli
     private Thread playerThread;
 
     public SpotifyClientImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf)  throws RemoteException {
-        super(0, rmicsf, rmissf);
+        super(1100, rmicsf, rmissf);
     }
 
     public boolean launchMediaPlayer(Media m) throws RemoteException {
