@@ -6,19 +6,21 @@ import spotify.media.*;
 import spotify.stream.ClientStream;
 
 import java.rmi.RemoteException;
+import java.rmi.server.RMIClientSocketFactory;
+import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 
 public class SpotifyClientImpl extends UnicastRemoteObject implements SpotifyClient {
     private Thread playerThread;
 
-    public SpotifyClientImpl() throws RemoteException {
-        super();
+    public SpotifyClientImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf)  throws RemoteException {
+        super(0, rmicsf, rmissf);
     }
 
     public boolean launchMediaPlayer(Media m) throws RemoteException {
         try {
-        MediaPlayer mediaplayer = new MediaPlayer(Globals.player_command, Globals.player_abs_filepath+m.getName()+ Globals.file_extension, Globals.player_delay_ms);
+            MediaPlayer mediaplayer = new MediaPlayer(Globals.player_command, Globals.player_abs_filepath+m.getName()+ Globals.file_extension, Globals.player_delay_ms);
             playerThread = new Thread(mediaplayer);
             playerThread.start();
         }catch (Exception e){ e.printStackTrace(); return false; }
