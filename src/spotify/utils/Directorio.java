@@ -49,5 +49,8 @@ public class Directorio {
     public boolean contieneClave(String clave) {
         return this.directorio.containsKey(clave);
     }
+    public void eliminarMedia(String nombre) {
+        this.directorio.remove(nombre);
+    }
 }
 
