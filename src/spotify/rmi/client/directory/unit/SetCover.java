@@ -4,6 +4,7 @@ import spotify.rmi.common.Spotify;
 import spotify.media.Media;
 import java.rmi.Naming;
 
+
 public class SetCover {
     public static void main(String[] args) {
         try {
@@ -12,11 +13,11 @@ public class SetCover {
                 Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
 
                 // Crear un objeto Media con el nombre de la canción
-                String nombreCancion = "cancion";
+                String nombreCancion = args[0];
                 Media media = new Media(nombreCancion);
-                media.loadCover("direccion donde se encuentra la imagen");
 
                 // Cargar la carátula desde la ruta proporcionada
+                media.loadCover("/home/hecforc/Descargas/DQE.jpeg");
 
 
                 // Enviar el objeto Media con la carátula cargada al servidor
