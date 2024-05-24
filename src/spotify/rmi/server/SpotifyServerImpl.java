@@ -119,14 +119,28 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
 
     @Override
     public String setCover(Media cancion) throws RemoteException {
+        try {
+            // Obtener la media existente en el directorio
+            Media mediaExistente = directorio.obtenerMedia(cancion.getName());
+            if (mediaExistente == null) {
+                return "No se ha podido cambiar la carátula";
+            }
 
-        if ((directorio.obtenerMedia(cancion.getName())) == null){
-            return "No se ha podido cambiar la carátula";
+            // Obtener la imagen del objeto Media recibido
+            ImageIcon imagen = cancion.getCover();
+            if (imagen == null) {
+                return "La imagen de la carátula no está presente en el objeto Media recibido";
+            }
+
+            // Asignar la nueva imagen a la media existente
+            mediaExistente.setCover(imagen);
+            directorio.anadirMedia(cancion.getName(), mediaExistente);
+            return "Imagen cargada con éxito";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error al establecer la carátula: " + e.getMessage();
         }
-        directorio.eliminarMedia(cancion.getName());
-        directorio.anadirMedia(cancion.getName(), cancion);
-        return "Imagen actualizada/creada con exito";
-
     }
 
     @Override
