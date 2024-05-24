@@ -12,11 +12,12 @@ public class SetCover {
                 Spotify or = (Spotify) Naming.lookup("rmi://" + host + "/id1");
 
                 // Crear un objeto Media con el nombre de la canción
-                String nombreCancion = args[0];
+                String nombreCancion = "cancion";
                 Media media = new Media(nombreCancion);
+                media.loadCover("direccion donde se encuentra la imagen");
 
                 // Cargar la carátula desde la ruta proporcionada
-                media.loadCover("/home/hecforc/Descargas/DQE"); // Ruta donde tengas la foto
+
 
                 // Enviar el objeto Media con la carátula cargada al servidor
                 String respuesta = or.setCover(media);
