@@ -3,8 +3,6 @@ import spotify.media.Globals;
 import spotify.media.Media;
 import spotify.rmi.common.*;
 import java.rmi.RemoteException;
-import java.rmi.server.RMIClientSocketFactory;
-import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +14,13 @@ import spotify.utils.Directorio;
 
 import javax.swing.*;
 
-
 public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, SpotifyServer {
     private SpotifyClient cliente;
     private ConcurrentHashMap<String, String> registroUsuarios;
     private final MultiMap<String, Media> mapa;
     private final Directorio directorio;
-    public SpotifyServerImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf) throws RemoteException {
-        super(1100, rmicsf, rmissf);
+    public SpotifyServerImpl() throws java.rmi.RemoteException {
+        super();
         this.directorio = new Directorio();
         this.mapa = new MultiMap<>();
         this.registroUsuarios = new ConcurrentHashMap<>();
@@ -117,30 +114,19 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         return directorio.obtenerMedia(nombreCancion);
     }
 
+
+    //En el enunciado no pasa el string de nombre cancion
     @Override
-    public String setCover(Media cancion) throws RemoteException {
-        try {
-            // Obtener la media existente en el directorio
-            Media mediaExistente = directorio.obtenerMedia(cancion.getName());
-            if (mediaExistente == null) {
-                return "No se ha podido cambiar la carátula";
-            }
-
-            // Obtener la imagen del objeto Media recibido
-            ImageIcon imagen = cancion.getCover();
-            if (imagen == null) {
-                return "La imagen de la carátula no está presente en el objeto Media recibido";
-            }
-
-            // Asignar la nueva imagen a la media existente
-            mediaExistente.setCover(imagen);
-            directorio.anadirMedia(cancion.getName(), mediaExistente);
-            return "Imagen cargada con éxito";
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error al establecer la carátula: " + e.getMessage();
+    public String setCover(Media imagen) throws RemoteException {
+        Media aux;
+        String nombreCancion = imagen.getName();
+        if ((aux = directorio.obtenerMedia(nombreCancion)) == null){
+            return "No se ha podido cambiar la carátula";
         }
+
+        aux.loadCover("./jpgfiles/" + nombreCancion + ".jpg");
+        directorio.anadirMedia(nombreCancion,aux);
+        return "Se ha podido cambiar la carátula";
     }
 
     @Override
@@ -199,8 +185,8 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         if (cancion == null || !directorio.contieneClave(cancion.getName())){
             return "Media is null or does not exist in the directory";
         }
-
-        ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
+        String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
+        ServerStream ss = new ServerStream(pathFile, this.cliente); // Completa los puntos suspensivos con el puerto deseado
         try {
             new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
             Thread.sleep(2000);
@@ -237,10 +223,9 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         if (cancion == null || !directorio.contieneClave(cancion.getName())){
             return "Media is null or does not exist in the directory";
         }
-
         // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
         String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
-        ServerStream ss = new ServerStream(cancion.toString(), this.cliente); // Completa los puntos suspensivos con el puerto deseado
+        ServerStream ss = new ServerStream(pathFile, this.cliente); // Completa los puntos suspensivos con el puerto deseado
         try {
             new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
             Thread.sleep(2000);
