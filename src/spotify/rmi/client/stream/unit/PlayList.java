@@ -26,6 +26,7 @@ public class PlayList {
 
 
                 boolean terminar=false;
+                Media media=spotify.readL();
                 System.out.println(((Spotify) or).hello());
                 java.io.BufferedReader tec =
                         new java.io.BufferedReader(
@@ -35,13 +36,14 @@ public class PlayList {
 
                     System.out.println("Que desea hacer, 1-Escuchar la cancion,2-pasar a la siguiente, 3 terminar el proceso");
                     linea= tec.readLine();
-                    Media media=spotify.readL();
+
                     if(linea.equals("1")){
                         if(media == null){
                             System.out.println("PlayList vacia");
 
                         }
                         else {
+
                             server.startMedia(media);
                             Thread.sleep(5000);
                             System.out.print("ESCUCHANDO");
@@ -50,6 +52,7 @@ public class PlayList {
                         }
                     } else if (linea.equals("2")) {
                         System.out.println("CANCION ACTUAL "+spotify.peekL());
+                        media=spotify.readL();
                     }
                     else{
                         terminar=true;
