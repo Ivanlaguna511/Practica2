@@ -46,13 +46,19 @@
 
                                 server.startMedia(media);
                                 Thread.sleep(5000);
+                                media = spotify.retrieveMedia(media.getName());
                                 System.out.print("ESCUCHANDO");
                                 System.out.println(media);
 
                             }
                         } else if (linea.equals("2")) {
-                            System.out.println("CANCION ACTUAL "+spotify.peekL());
                             media=spotify.readL();
+                            if(media == null){
+                                System.out.println("Ninguna cancion seleccionada");
+                            }else {
+                                System.out.println("CANCION ACTUAL "+media);
+                            }
+
                         }
                         else{
                             terminar=true;
