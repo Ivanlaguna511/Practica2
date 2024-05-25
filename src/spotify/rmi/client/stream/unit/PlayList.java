@@ -24,19 +24,9 @@ public class PlayList {
                 SpotifyServer server=(SpotifyServer) or;
                 server.setClientStreamReceptor(cliente);
 
-                //parte donde se debe añadir canciones para poder reproducirlas
-                String cancion1="cancion1";
-                String cancion2="cancion1";
-                String cancion3="cancion1";
-                Media media1=new Media(cancion1);
-                Media media2=new Media(cancion2);
-                Media media3=new Media(cancion3);
-                spotify.add2L(media1);
-                spotify.add2L(media2);
-                spotify.add2L(media3);
 
                 boolean terminar=false;
-                Media media=spotify.readL();
+
                 java.io.BufferedReader tec =
                         new java.io.BufferedReader(
                                 new java.io.InputStreamReader(System.in));
@@ -45,21 +35,28 @@ public class PlayList {
 
                     System.out.println("Que desea hacer, 1-Escuchar la cancion,2-pasar a la siguiente, 3 terminar el proceso");
                     linea= tec.readLine();
+                    Media media=spotify.readL();
                     if(linea.equals("1")){
-                        server.startMedia(media);
-                        spotify.readL();
-                        System.out.println("se ha escuchado la cancion " + media.getName());
-                    } else if (linea.equals("1")) {
-                        System.out.println("la siguiente cancion es "+spotify.peekL());
-                        spotify.readL();
+                        if(media == null){
+                            System.out.println("PlayList vacia");
 
+                        }
+                        else {
+                            server.startMedia(media);
+                            Thread.sleep(5000);
+                            System.out.print("ESCUCHANDO");
+                            System.out.println(media);
+
+                        }
+                    } else if (linea.equals("2")) {
+                        System.out.println("CANCION ACTUAL "+spotify.peekL());
                     }
                     else{
                         terminar=true;
                     }
 
                 }
-
+                System.out.println("ADIOS");
             } else {
 
             }
