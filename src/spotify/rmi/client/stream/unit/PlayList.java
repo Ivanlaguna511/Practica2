@@ -26,7 +26,7 @@ public class PlayList {
 
 
                 boolean terminar=false;
-
+                System.out.println(((Spotify) or).hello());
                 java.io.BufferedReader tec =
                         new java.io.BufferedReader(
                                 new java.io.InputStreamReader(System.in));
