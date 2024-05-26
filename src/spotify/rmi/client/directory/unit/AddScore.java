@@ -35,3 +35,5 @@ public class AddScore {
             System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();
         }
+    }
+}
