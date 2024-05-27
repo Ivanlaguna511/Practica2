@@ -20,7 +20,6 @@ public class Add2L {
                 String cancion = args[0];
                 Media media = new Media(cancion);
                 String playlist = args[1];
-
                 or.add2L(playlist, media);
                 System.out.println("Canción " + cancion + " añadida a la playlist " + playlist + ".");
             } else {
