@@ -59,15 +59,17 @@
                                 System.out.println("CANCION ACTUAL "+media);
                             }
 
+                        }else if (linea.equals("3")) {
+                            terminar=true;
+
                         }
                         else{
-                            terminar=true;
+                            System.out.println("Comando no valido");
                         }
 
                     }
                     System.out.println("ADIOS");
-                } else {
-
+                    System.exit(0);
                 }
             } catch (java.rmi.RemoteException re) {
                 System.err.println("<Cliente: Excepción RMI:" + re);
