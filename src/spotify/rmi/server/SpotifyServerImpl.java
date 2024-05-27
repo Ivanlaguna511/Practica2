@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -102,7 +103,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         // Unir las claves utilizando un separador ", "
         String result = "";
         for (int i = 0; i < keys.size() - 1; i++) {
-            result += keys.get(i) + ", ";
+            result += keys.get(i) + ",";
         }
         // Añadir la última clave sin la coma final
         result += keys.get(keys.size()-1);
@@ -123,7 +124,6 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         if ((aux = directorio.obtenerMedia(nombreCancion)) == null){
             return "No se ha podido cambiar la carátula";
         }
-
         aux.loadCover("./jpgfiles/" + nombreCancion + ".jpg");
         directorio.anadirMedia(nombreCancion,aux);
         return "Se ha podido cambiar la carátula";
@@ -226,6 +226,7 @@ public class SpotifyServerImpl extends UnicastRemoteObject implements Spotify, S
         // 2. PREPARE A SERVERSOCKET FOR THE STREAMING
         String pathFile = Globals.path_origin + cancion.getName() + Globals.file_extension;
         ServerStream ss = new ServerStream(pathFile, this.cliente); // Completa los puntos suspensivos con el puerto deseado
+
         try {
             new Thread(ss, "streamserver").start(); // Ejecuta en un hilo aparte la preparación del ServerSocket
             Thread.sleep(2000);
