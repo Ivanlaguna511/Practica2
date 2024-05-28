@@ -8,6 +8,7 @@ import spotify.rmi.common.SpotifyServer;
 import spotify.rmi.server.SpotifyServerImpl;
 import spotify.utils.Directorio;
 
+import javax.swing.*;
 import java.rmi.Naming;
 
 public class PlaySong {
@@ -17,17 +18,16 @@ public class PlaySong {
             Object or = (Object) Naming.lookup("rmi://" + host + "/id1");
             SpotifyClient cliente=new SpotifyClientImpl();
 
-            if (args.length == 0) {
+            if (args.length == 1) {
                 Spotify spotify=(Spotify) or;
                 SpotifyServer server=(SpotifyServer) or;
-                String cancion = "cancion";
-                Media media=new Media(cancion);
-                spotify.add2L(media);
+                String cancion = args[0];
+                Media media = new Media(cancion);
                 server.setClientStreamReceptor(cliente);
                 System.out.println(server.startMedia(media));
-                
-            } else {
 
+            } else {
+                System.out.println("Debes introducir una cancion");
             }
         } catch (java.rmi.RemoteException re) {
             System.err.println("<Cliente: Excepción RMI:" + re);
