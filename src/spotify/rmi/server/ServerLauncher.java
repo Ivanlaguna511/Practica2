@@ -1,6 +1,5 @@
 package spotify.rmi.server;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 /*
@@ -12,11 +11,18 @@ manera masiva varios de estos elementos para cargarlos rápidamente.
 public class ServerLauncher {
     public static void main(String [ ] args) {
         try {
-            SslRMIClientSocketFactory rmicsf = new SslRMIClientSocketFactory();
-            javax.rmi.ssl.SslRMIServerSocketFactory rmissf = new javax.rmi.ssl.SslRMIServerSocketFactory();
-            Registry r = java.rmi.registry.LocateRegistry.createRegistry(1100, rmicsf, rmissf);
-            SpotifyServerImpl oRemoto = new SpotifyServerImpl(rmicsf, rmissf);
-            r.rebind("id1", oRemoto);
+            SpotifyServerImpl oRemoto = new SpotifyServerImpl();
+            /**
+             * TO CRETAE & LAUNCH THE RMI-REGISTRY VIA SOFT
+             */
+            Registry registro =
+
+                    LocateRegistry.createRegistry(1099);
+            /**
+             * TO GET THE RMI-REGISTRY REF OF IP-ADDRESS
+             */
+            //Registry registro = LocateRegistry.getRegistry("localhost");
+            registro.rebind("id1", oRemoto);
             System.err.println("Servidor preparado");
         } catch (Exception e) {
             System.err.println("Excepción del servidor: "+e.toString());
