@@ -14,8 +14,8 @@ import java.rmi.server.UnicastRemoteObject;
 public class SpotifyClientImpl extends UnicastRemoteObject implements SpotifyClient {
     private Thread playerThread;
 
-    public SpotifyClientImpl(RMIClientSocketFactory rmicsf, RMIServerSocketFactory rmissf)  throws RemoteException {
-        super(1100, rmicsf, rmissf);
+    public SpotifyClientImpl()  throws RemoteException {
+        super();
     }
 
     public boolean launchMediaPlayer(Media m) throws RemoteException {
