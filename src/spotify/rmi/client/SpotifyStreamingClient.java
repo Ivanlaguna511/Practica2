@@ -42,9 +42,11 @@ public class SpotifyStreamingClient {
                         while (!scanner.hasNextLine()) { Thread.sleep(100); }
                         String songName = scanner.nextLine();
                         System.out.println("SERVER: " + serverController.startMedia(new Media(songName)));
+                        Thread.sleep(1500);
                         break;
                     case "2":
                         System.out.println("SERVER: " + serverController.randomPlay());
+                        Thread.sleep(1500);
                         break;
                     case "3":
                         System.out.print("Enter song name to inspect: ");
