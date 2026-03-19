@@ -17,7 +17,7 @@
 > ⚠️ *Note: If you want to test the streaming architecture without generating SSL certificates, please switch to the `module-2` branch.*
 
 <div align="center">
-  <img width="400" alt="Estructura de directorios" src="https://github.com/user-attachments/assets/15393849-b703-4f3a-b168-1e9007b9dcd7" />
+  <img width="400" src="https://github.com/user-attachments/assets/15393849-b703-4f3a-b168-1e9007b9dcd7" />
 </div>
 
 ---
